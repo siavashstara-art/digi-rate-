@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="112" fill="#090D16"/>
+  <rect x="24" y="24" width="464" height="464" rx="92" stroke="#F59E0B" stroke-width="10" stroke-opacity="0.4"/>
+  <path d="M168 116H344C366.091 116 384 133.909 384 156V356C384 378.091 366.091 396 344 396H168C145.909 396 128 378.091 128 356V156C128 133.909 145.909 116 168 116Z" fill="#111827" stroke="#F59E0B" stroke-width="16"/>
+  <rect x="220" y="144" width="72" height="12" rx="6" fill="#F59E0B"/>
+  <path d="M188 238L232 282L324 190" stroke="#10B981" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="256" y="352" text-anchor="middle" fill="#F59E0B" font-family="monospace" font-weight="bold" font-size="44">VIP$</text>
+</svg>

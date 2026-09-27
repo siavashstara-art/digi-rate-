@@ -1,0 +1,40 @@
+{
+  "id": "/",
+  "name": "DigiRate VIP | دیجی‌ریت وی‌آی‌پی - سامانه لیست قیمت لحظه‌ای موبایل و قطعات",
+  "short_name": "DigiRate VIP",
+  "description": "سامانه هوشمند لیست قیمت لحظه‌ای دلاری/درهمی، بنکداری موبایل، لپ‌تاپ، قطعات تعمیراتی و لوازم جانبی ایران و دبی",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090D16",
+  "theme_color": "#F59E0B",
+  "dir": "rtl",
+  "lang": "fa-IR",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

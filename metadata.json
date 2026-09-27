@@ -1,0 +1,6 @@
+{
+  "name": "DigiRate VIP | دیجی‌ریت وی‌آی‌پی",
+  "description": "سامانه هوشمند لیست قیمت لحظه‌ای دلاری و درهمی، بنکداری موبایل، لپ‌تاپ، قطعات تعمیراتی و لوازم جانبی ایران و دبی",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

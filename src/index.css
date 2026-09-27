@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  body {
+    font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #F8FAFC;
+    color: #0F172A;
+    overflow-x: hidden;
+    line-height: 1.65;
+  }
+
+  .font-mono-num {
+    font-family: 'JetBrains Mono', 'Vazirmatn', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* High visibility focus rings for motor & keyboard accessibility */
+  *:focus-visible {
+    outline: 3px solid #0284C7 !important;
+    outline-offset: 2px !important;
+  }
+}
+
+/* Accessibility & ADHD Focus Mode Helpers */
+.a11y-large-font {
+  font-size: 112%;
+  letter-spacing: 0.01em;
+}
+
+.a11y-xlarge-font {
+  font-size: 124%;
+  letter-spacing: 0.015em;
+  line-height: 1.85;
+}
+
+.a11y-high-contrast {
+  filter: contrast(1.12);
+}
+
+.adhd-calm-mode * {
+  animation: none !important;
+  transition-duration: 0.05s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

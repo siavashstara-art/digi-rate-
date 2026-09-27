@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>Afrina DigiRate VIP | آفرینا دیجی‌رِیت وی‌آی‌پی - Arable Way City Afrina</title>
+    <meta name="description" content="Arable Way City Afrina | اکوسیستم آفرینش - سامانه هوشمند لیست قیمت لحظه‌ای دلاری/درهمی، بنکداری موبایل، لپ‌تاپ، قطعات تعمیراتی و لوازم جانبی ایران و دبی" />
+    <meta property="og:title" content="Afrina DigiRate VIP | آفرینا دیجی‌رِیت وی‌آی‌پی" />
+    <meta property="og:description" content="Arable Way City Afrina - سامانه هوشمند لیست قیمت لحظه‌ای دلاری/درهمی، بنکداری موبایل، لپ‌تاپ و قطعات" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="AfrinaVIP" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-[#F8FAFC] text-slate-900 antialiased selection:bg-emerald-500 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

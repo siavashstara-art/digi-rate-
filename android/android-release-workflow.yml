@@ -1,0 +1,73 @@
+name: Build Signed APK & AAB (CafeBazaar, Myket, Google Play)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-signed-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle 8.5
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
+
+      - name: Automated Keystore Generation for Signed Release (Myket / CafeBazaar / Play Store)
+        working-directory: ./android/app
+        run: |
+          if [ ! -f release-keystore.jks ]; then
+            keytool -genkeypair -v \
+              -keystore release-keystore.jks \
+              -alias afrinavip \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass afrina123456 \
+              -keypass afrina123456 \
+              -dname "CN=Arable Way City Afrina, OU=DigiRate VIP, O=Afrina Ecosystem, L=Tehran, ST=Tehran, C=IR"
+          fi
+
+      - name: Build Signed Release APK (For Myket & CafeBazaar)
+        working-directory: ./android
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || 'afrina123456' }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'afrinavip' }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'afrina123456' }}
+        run: gradle assembleRelease --no-daemon
+
+      - name: Build Signed Release App Bundle AAB (For Google Play Console)
+        working-directory: ./android
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || 'afrina123456' }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'afrinavip' }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'afrina123456' }}
+        run: gradle bundleRelease --no-daemon
+
+      - name: Upload Signed APK for Myket & CafeBazaar
+        uses: actions/upload-artifact@v4
+        with:
+          name: Afrina-DigiRate-VIP-Signed-APK-Myket-Bazaar
+          path: android/app/build/outputs/apk/release/*.apk
+
+      - name: Upload Signed App Bundle (AAB) for Google Play
+        uses: actions/upload-artifact@v4
+        with:
+          name: Afrina-DigiRate-VIP-Signed-AAB-GooglePlay
+          path: android/app/build/outputs/bundle/release/*.aab
+
+      - name: Upload Release Keystore Backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: Afrina-DigiRate-Release-Keystore
+          path: android/app/release-keystore.jks
