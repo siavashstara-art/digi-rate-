@@ -426,6 +426,256 @@ export const VIP_TIERS: VipTierPlan[] = [
   },
 ];
 
+export interface TradingCompanyAd {
+  id: string;
+  companyName: string;
+  englishName: string;
+  category: 'mobile_importer' | 'laptop_distributor' | 'parts_wholesaler' | 'accessories_hub' | 'installment_store';
+  categoryLabel: string;
+  sponsorTier: 'diamond' | 'gold' | 'verified';
+  sponsorBadgeText: string;
+  cityAndHub: string;
+  specialty: string;
+  adBannerHeadline: string;
+  partnerOfferText: string;
+  whatsappPhone: string;
+  landlinePhone: string;
+  yearsActive: number;
+  verifiedGuarantee: string;
+  accentColor: string;
+}
+
+export const INITIAL_TRADING_COMPANIES: TradingCompanyAd[] = [
+  {
+    id: 'tc-1',
+    companyName: 'بازرگانی بین‌المللی رویال همراه دبی - تهران',
+    englishName: 'Royal Hamrah Dubai-Tehran Trading Co.',
+    category: 'mobile_importer',
+    categoryLabel: 'واردکننده مستقیم موبایل و تبلت (دبی / علاءالدین)',
+    sponsorTier: 'diamond',
+    sponsorBadgeText: '💎 اسپانسر الماسی · واردکننده رسمی',
+    cityAndHub: 'دبی (دیره، سبخه) · تهران (پاساژ علاءالدین طبقه ۴ واحد ۴۱۲)',
+    specialty: 'پخش عمده آیفون ۱۶ پرومکس ZAA، سامسونگ پک ویتنام و شیائومی گلوبال با کد همتا',
+    adBannerHeadline: 'تامین مستقیم کارتن مادر آیفون و سامسونگ به فی درهم لحظه‌ای دبی بدون واسطه!',
+    partnerOfferText: 'ارسال ۲ ساعته در تهران + اعتبار چک صیادی بنفش تا ۱ میلیارد تومان ویژه همکاران VIP',
+    whatsappPhone: '989120001111',
+    landlinePhone: '021-66701111',
+    yearsActive: 14,
+    verifiedGuarantee: 'تضمین ۱۰۰٪ پلمپ اصلی و کد فعال‌سازی همتا + ۱۸ ماه گارانتی',
+    accentColor: 'from-emerald-600 to-teal-700',
+  },
+  {
+    id: 'tc-2',
+    companyName: 'بازرگانی مک و الترابوک پارسیان (پخش لپ‌تاپ و تبلت)',
+    englishName: 'Parsian MacBook & Laptop Trading House',
+    category: 'laptop_distributor',
+    categoryLabel: 'بازرگانی تخصصی لپ‌تاپ، مک‌بوک و سرفیس',
+    sponsorTier: 'diamond',
+    sponsorBadgeText: '💎 اسپانسر الماسی · سورس لپ‌تاپ و تبلت',
+    cityAndHub: 'تهران (میدان ولیعصر، مجتمع پایتخت و پاساژ چارسو)',
+    specialty: 'واردات مستقیم MacBook Air/Pro M3، لپ‌تاپ‌های گیمینگ ASUS ROG، Lenovo Legion و iPad Pro M4',
+    adBannerHeadline: 'کف قیمت مک‌بوک M3 پارت LLA و لپ‌تاپ گیمینگ در کل ایران — ویژه مغازه‌داران کامپیوتر!',
+    partnerOfferText: 'تخفیف پلکانی روی خرید ۳ دستگاه به بالا + ۱۰ روز مهلت تست سلامت باتری و پیکسل',
+    whatsappPhone: '989120002222',
+    landlinePhone: '021-88902222',
+    yearsActive: 11,
+    verifiedGuarantee: 'پلمپ تیپاکسی اپل + فاکتور رسمی شرکتی با سریال نامبر',
+    accentColor: 'from-sky-600 to-indigo-700',
+  },
+  {
+    id: 'tc-3',
+    companyName: 'قطعات اورجینال آریا تک (سورس شنژن و علاءالدین)',
+    englishName: 'AriaTech Original Mobile Parts & Tools',
+    category: 'parts_wholesaler',
+    categoryLabel: 'پخش عمده قطعات تعمیراتی و تجهیزات (LCD / باتری)',
+    sponsorTier: 'gold',
+    sponsorBadgeText: '🥇 اسپانسر طلایی · تضمین فابریک روکاری',
+    cityAndHub: 'شنژن چین (هواچیانگ‌بی) · تهران (علاءالدین طبقه منفی ۱)',
+    specialty: 'ال‌سی‌دی فابریک روکاری آیفون و سامسونگ، باتری تقویت‌شده آی‌سی TI، لوپ و هیتر Quick اصلی',
+    adBannerHeadline: 'تامین قطعه ۱۰۰٪ فابریک روکاری همراه با شناسنامه دیجیتال سلامت و ۷ روز مهلت تست تعویض!',
+    partnerOfferText: 'مرجوعی بی‌قید و شرط در صورت هرگونه ارور تاچ یا افت سلامت باتری ویژه تعمیرکاران',
+    whatsappPhone: '989120003333',
+    landlinePhone: '021-66703333',
+    yearsActive: 9,
+    verifiedGuarantee: 'هولوگرام اصالت قطعه + ۷ روز ضمانت تعویض درجا حتی پس از نصب',
+    accentColor: 'from-amber-500 to-orange-600',
+  },
+  {
+    id: 'tc-4',
+    companyName: 'بازرگانی لوازم جانبی گوانگجو - بازار بزرگ',
+    englishName: 'Guangzhou-Tehran Bulk Accessories Co.',
+    category: 'accessories_hub',
+    categoryLabel: 'پخش کارتنی لوازم جانبی، کلگی شارژر و گجت',
+    sponsorTier: 'gold',
+    sponsorBadgeText: '🥇 اسپانسر طلایی · پخش کارتنی جانبی',
+    cityAndHub: 'تهران (بازار بزرگ، تیمچه حاجب‌الدوله) · گناوه و بندرعباس',
+    specialty: 'پخش کارتنی کلگی ۲۰ وات و ۴۵ وات اصلی، کابل، گلس، قاب، ایرپاد و اپل‌واچ به قیمت یوان چین',
+    adBannerHeadline: 'خرید مستقیم کارتن ۵۰ تایی شارژر و جانبی با حاشیه سود ۳۰ تا ۶۰ درصدی برای مغازه‌داران!',
+    partnerOfferText: 'ارسال باربری رایگان به تمام شهرستان‌ها برای سفارش‌های بالای ۲ کارتن + ۱ سال گارانتی تعویض',
+    whatsappPhone: '989120004444',
+    landlinePhone: '021-55604444',
+    yearsActive: 16,
+    verifiedGuarantee: 'لیبل لیزری ضمانت تعویض ۱ ساله روی تک‌تک کلگی‌ها و کابل‌ها',
+    accentColor: 'from-violet-600 to-purple-700',
+  },
+  {
+    id: 'tc-5',
+    companyName: 'مجموعه فروشگاه‌های زنجیره‌ای قسطی‌موبایل پایتخت',
+    englishName: 'GhestiMobile Paytakht Chain Stores',
+    category: 'installment_store',
+    categoryLabel: 'فروشگاه برتر اقساطی (چک صیادی) و معاوضه Trade-In',
+    sponsorTier: 'verified',
+    sponsorBadgeText: '✅ فروشگاه منتخب · اقساط چک صیادی',
+    cityAndHub: 'تهران (شهرک غرب و ولیعصر) · کرج · اصفهان · مشهد',
+    specialty: 'فروش اقساطی ۳ تا ۱۲ ماهه انواع گوشی و لپ‌تاپ با چک صیادی بنفش + معاوضه گوشی کارکرده با آکبند',
+    adBannerHeadline: 'تحویل درجا گوشی و لپ‌تاپ فقط با ۳۰٪ پیش‌پرداخت و چک صیادی بدون ضامن — تسویه ۲۰ دقیقه‌ای!',
+    partnerOfferText: 'همکاری دوطرفه با موبایل‌فروشان محلی جهت تامین سرمایه فروش اقساطی مشتریان شما',
+    whatsappPhone: '989120005555',
+    landlinePhone: '021-22005555',
+    yearsActive: 8,
+    verifiedGuarantee: 'قرارداد رسمی اتحادیه + تحویل کارتن و مالکیت همتا در لحظه خرید',
+    accentColor: 'from-teal-600 to-emerald-700',
+  },
+];
+
+export interface AdPlacementPackage {
+  id: string;
+  title: string;
+  positionDesc: string;
+  durationLabel: string;
+  priceToman: number;
+  estimatedViews: string;
+  features: string[];
+  badge: string;
+}
+
+export const AD_PLACEMENT_PACKAGES: AdPlacementPackage[] = [
+  {
+    id: 'ad-diamond-banner',
+    title: 'پکیج ۱: بنر الماسی بالای لیست قیمت + پین در دایرکتوری بازرگانی‌ها',
+    positionDesc: 'نمایش دائمی در بالای صفحه اصلی در معرض دید هزاران موبایل‌فروش و بنکدار',
+    durationLabel: 'نمایش ۱ ماهه کامل',
+    priceToman: 12500000,
+    estimatedViews: '+۴۵,۰۰۰ بازدید تخصصی همکار در ماه',
+    badge: 'بالاترین بازدهی B2B',
+    features: [
+      'بنر اختصاصی تمام‌عرض بالای لیست قیمت لحظه‌ای با دکمه مستقیم واتساپ',
+      'نشان «اسپانسر الماسی 💎» در صدر دایرکتوری بازرگانی‌ها و فروشگاه‌ها',
+      'معرفی پیامکی و نوتیفیکیشن حراج بار شما به تمام همکاران نصب‌کننده اپلیکیشن',
+    ],
+  },
+  {
+    id: 'ad-gold-directory',
+    title: 'پکیج ۲: کارت طلایی معرفی بازرگانی / فروشگاه در دایرکتوری تخصصی',
+    positionDesc: 'ثبت پروفایل کامل بازرگانی، لیست کالاهای تخصصی و شماره تماس مستقیم',
+    durationLabel: 'نمایش ۱ ماهه کامل',
+    priceToman: 6800000,
+    estimatedViews: '+۲۵,۰۰۰ بازدید تخصصی همکار در ماه',
+    badge: 'پرفروش‌ترین جایگاه معرفی',
+    features: [
+      'کارت ویژه طلایی با تیک تایید اصالت بازرگانی در بخش معرفی فروشگاه‌ها',
+      'لینک مستقیم استعلام واتساپ و تماس تلفنی با بخش فروش عمده شما',
+      'امکان بروزرسانی متن پیشنهاد ویژه و شرایط فروش چکی/نقدی در هر لحظه',
+    ],
+  },
+  {
+    id: 'ad-flash-clearance',
+    title: 'پکیج ۳: اسپانسر حراج ۶۰ دقیقه‌ای بار تازه ترخیص دبی و گمرک',
+    positionDesc: 'نمایش نام بازرگانی شما روی شمارش معکوس حراج فوری پارت بار دبی',
+    durationLabel: 'کمپین ۱ هفته‌ای ویژه',
+    priceToman: 4900000,
+    estimatedViews: 'فروش فوری پارت بار در کمتر از ۲ ساعت',
+    badge: 'ویژه آب کردن سریع بار',
+    features: [
+      'درج نام و شماره واتساپ بازرگانی شما روی کارت‌های حراج فوری دبی',
+      'ارسال مستقیم درخواست‌های رزرو بار مغازه‌داران به واتساپ فروش شما',
+      'مناسب واردکنندگانی که می‌خواهند پارت بار تازه ترخیص را سریع نقد کنند',
+    ],
+  },
+];
+
+export interface WhiteLabelConfig {
+  isCustomBrandActive: boolean;
+  storeOrCompanyNameFa: string;
+  storeOrCompanyNameEn: string;
+  sloganFa: string;
+  whatsappNumber: string;
+  landlinePhone: string;
+  cityAndAddress: string;
+  specialtyBadge: string;
+  licenseSalePriceToman: number;
+  themeColor: 'emerald' | 'sky' | 'amber' | 'indigo';
+}
+
+export const DEFAULT_WHITELABEL_CONFIG: WhiteLabelConfig = {
+  isCustomBrandActive: false,
+  storeOrCompanyNameFa: 'آفرینا فی‌بان (دیجی‌رِیت VIP)',
+  storeOrCompanyNameEn: 'Afrina FeeBan VIP (DigiRate)',
+  sloganFa: 'سامانه هوشمند فی لحظه‌ای دلاری/درهمی، مقایسه هم‌تراز، چک صیادی و پیش‌فاکتور IMEI',
+  whatsappNumber: '989120000000',
+  landlinePhone: '021-66700000',
+  cityAndAddress: 'تهران (پاساژ علاءالدین و چارسو) · دبی (دیره) · شنژن',
+  specialtyBadge: 'اکوسیستم جامع معاملات موبایل، لپ‌تاپ و قطعات',
+  licenseSalePriceToman: 24800000,
+  themeColor: 'emerald',
+};
+
+export const WHITELABEL_PRESETS: { id: string; label: string; config: WhiteLabelConfig }[] = [
+  {
+    id: 'preset-default',
+    label: '۱. برند اصلی پلتفرم: آفرینا فی‌بان (Afrina FeeBan VIP)',
+    config: DEFAULT_WHITELABEL_CONFIG,
+  },
+  {
+    id: 'preset-dubai-trading',
+    label: '۲. نمونه شخصی‌سازی برای بازرگانی واردات موبایل (قیمت فروش لایسنس: ۳۵ میلیون ت)',
+    config: {
+      isCustomBrandActive: true,
+      storeOrCompanyNameFa: 'بازرگانی بزرگ همراه دبی - شعبه مرکزی علاءالدین',
+      storeOrCompanyNameEn: 'Hamrah Dubai International Trading VIP',
+      sloganFa: 'سامانه اختصاصی اعلام فی لحظه‌ای کارتن مادر آیفون، سامسونگ و شیائومی به نرخ درهم دبی',
+      whatsappNumber: '989121112233',
+      landlinePhone: '021-66728899',
+      cityAndAddress: 'تهران، تقاطع جمهوری و حافظ، پاساژ علاءالدین، طبقه ۴، واحد ۴۰۵',
+      specialtyBadge: 'واردکننده رسمی موبایل با کد همتا و تسویه درهم/تتر',
+      licenseSalePriceToman: 35000000,
+      themeColor: 'sky',
+    },
+  },
+  {
+    id: 'preset-laptop-house',
+    label: '۳. نمونه شخصی‌سازی برای بازرگانی لپ‌تاپ و کامپیوتر (قیمت فروش لایسنس: ۲۸ میلیون ت)',
+    config: {
+      isCustomBrandActive: true,
+      storeOrCompanyNameFa: 'بازرگانی مک و لپ‌تاپ پایتخت (پخش عمده و اقساطی)',
+      storeOrCompanyNameEn: 'Paytakht MacBook & Pro Laptop Hub',
+      sloganFa: 'لیست قیمت لحظه‌ای دلاری مک‌بوک، سرفیس، لپ‌تاپ گیمینگ و تبلت + محاسبه اقساط چک صیادی',
+      whatsappNumber: '989123334455',
+      landlinePhone: '021-88945566',
+      cityAndAddress: 'تهران، خیابان ولیعصر، مجتمع کامپیوتر پایتخت، طبقه ۲، واحد ۲۰۸',
+      specialtyBadge: 'مرکز پخش تخصصی مک‌بوک M3 و لپ‌تاپ با ۱۸ ماه گارانتی',
+      licenseSalePriceToman: 28500000,
+      themeColor: 'indigo',
+    },
+  },
+  {
+    id: 'preset-chain-store',
+    label: '۴. نمونه شخصی‌سازی برای فروشگاه بزرگ موبایل و اقساط (قیمت فروش لایسنس: ۱۹.۸ میلیون ت)',
+    config: {
+      isCustomBrandActive: true,
+      storeOrCompanyNameFa: 'فروشگاه بزرگ اپل استور و دیجیتال ایرانیان',
+      storeOrCompanyNameEn: 'Iranian Apple & Digital Mega Store',
+      sloganFa: 'مرجع فروش نقد و اقساط (چک صیادی) و طرح تعویض گوشی کارکرده با آکبند (Trade-In)',
+      whatsappNumber: '989125556677',
+      landlinePhone: '021-22334455',
+      cityAndAddress: 'تهران، بلوار فرحزادی، مجتمع تجاری موبایل ایرانیان، پلاک ۱۲',
+      specialtyBadge: 'فروش اقساطی ۱۲ ماهه با چک صیادی بنفش + تحویل آنی',
+      licenseSalePriceToman: 19800000,
+      themeColor: 'amber',
+    },
+  },
+];
+
 export function calculateProductPrices(product: ProductItem, rates: MarketRates) {
   const rateValue = rates[product.baseCurrency] || rates.USD;
   // Round to nearest 10,000 Toman for clean market pricing

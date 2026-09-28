@@ -27,15 +27,26 @@ import {
   SlidersHorizontal,
   Scale,
   Laptop,
+  Building2,
+  Megaphone,
+  QrCode,
+  ShieldAlert,
+  Flame,
+  Palette,
+  PhoneCall,
 } from 'lucide-react';
 import {
   CATEGORIES,
   INITIAL_PRODUCTS,
   INITIAL_BUY_REQUESTS,
+  INITIAL_TRADING_COMPANIES,
+  DEFAULT_WHITELABEL_CONFIG,
   CategoryId,
   MarketRates,
   ProductItem,
   WholesaleBuyRequest,
+  TradingCompanyAd,
+  WhiteLabelConfig,
   calculateProductPrices,
   formatToman,
   formatForeign,
@@ -44,9 +55,10 @@ import { LANGUAGES, LanguageCode, UI_TRANSLATIONS } from './data/i18n';
 import { InstallmentTradeInModal } from './components/InstallmentTradeInModal';
 import { StoryMakerModal } from './components/StoryMakerModal';
 import { InvoiceCartModal, CartEntry } from './components/InvoiceCartModal';
-import { VipAffiliateModal } from './components/VipAffiliateModal';
+import { VipAffiliateModal, MonetizationTab } from './components/VipAffiliateModal';
 import { PwaGithubModal } from './components/PwaGithubModal';
 import { DeviceComparisonModal } from './components/DeviceComparisonModal';
+import { ProInnovationModal } from './components/ProInnovationModal';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -118,10 +130,28 @@ export default function App() {
   const [isStoryModalOpen, setIsStoryModalOpen] = useState<boolean>(false);
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState<boolean>(false);
   const [isVipModalOpen, setIsVipModalOpen] = useState<boolean>(false);
-  const [vipInitialView, setVipInitialView] = useState<'vip' | 'affiliate'>('vip');
+  const [vipInitialView, setVipInitialView] = useState<MonetizationTab>('vip');
   const [activeVipLevel, setActiveVipLevel] = useState<number>(3);
   const [isPwaModalOpen, setIsPwaModalOpen] = useState<boolean>(false);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState<boolean>(false);
+  const [isProModalOpen, setIsProModalOpen] = useState<boolean>(false);
+  const [proInitialTab, setProInitialTab] = useState<
+    'qr_label' | 'sayadi_check' | 'parts_passport' | 'flash_clearance'
+  >('qr_label');
+
+  // White-Label Store / Trading Company Personalization State
+  const [whiteLabelConfig, setWhiteLabelConfig] = useState<WhiteLabelConfig>(
+    DEFAULT_WHITELABEL_CONFIG
+  );
+
+  // Sponsored Ads & Featured Trading Companies / Stores State
+  const [tradingCompanies, setTradingCompanies] = useState<TradingCompanyAd[]>(
+    INITIAL_TRADING_COMPANIES
+  );
+  const [selectedAdCategory, setSelectedAdCategory] = useState<
+    'all' | TradingCompanyAd['category']
+  >('all');
+  const [activeBannerIdx, setActiveBannerIdx] = useState<number>(0);
 
   // PWA Install Prompt Capture
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -440,17 +470,28 @@ export default function App() {
       {/* 3. Main Brand Header & Quick Action Toolbar */}
       <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-4">
-          {/* Zone 1: Brand Title */}
+          {/* Zone 1: Brand Title (Supports Live White-Label Customization for Stores & Trading Companies) */}
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-sky-600 flex items-center justify-center text-white font-black text-lg shadow-md">
-              VIP
+              {whiteLabelConfig.isCustomBrandActive ? 'PRO' : 'VIP'}
             </div>
             <div>
-              <h1 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-                {t.appNameFaEn}
-              </h1>
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                  {whiteLabelConfig.isCustomBrandActive
+                    ? `${whiteLabelConfig.storeOrCompanyNameFa} | ${whiteLabelConfig.storeOrCompanyNameEn}`
+                    : t.appNameFaEn}
+                </h1>
+                {whiteLabelConfig.isCustomBrandActive && (
+                  <span className="text-[11px] font-extrabold bg-emerald-100 text-emerald-900 border border-emerald-300 px-2 py-0.5 rounded-md">
+                    ✓ نسخه اختصاصی White-Label ({whiteLabelConfig.specialtyBadge})
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-slate-500 font-medium hidden sm:block">
-                {t.appSubtitle}
+                {whiteLabelConfig.isCustomBrandActive
+                  ? `${whiteLabelConfig.sloganFa} · آدرس: ${whiteLabelConfig.cityAndAddress}`
+                  : t.appSubtitle}
               </p>
             </div>
           </div>
@@ -459,7 +500,7 @@ export default function App() {
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setIsPwaModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
             >
               <Smartphone className="w-4 h-4" />
               <span>{t.installPwaBtn}</span>
@@ -467,10 +508,21 @@ export default function App() {
 
             <button
               onClick={() => setIsCompareModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
             >
               <Scale className="w-4 h-4" />
               <span>{t.compareBtn}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setProInitialTab('qr_label');
+                setIsProModalOpen(true);
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
+            >
+              <QrCode className="w-4 h-4" />
+              <span>{t.proSuiteBtn}</span>
             </button>
 
             <button
@@ -479,7 +531,7 @@ export default function App() {
                 setCalcInitialTab('installment');
                 setIsCalcModalOpen(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
             >
               <Calculator className="w-4 h-4" />
               <span>{t.calcInstallmentBtn}</span>
@@ -487,7 +539,7 @@ export default function App() {
 
             <button
               onClick={() => setIsStoryModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
             >
               <ImageIcon className="w-4 h-4" />
               <span>{t.storyMakerBtn}</span>
@@ -495,18 +547,18 @@ export default function App() {
 
             <button
               onClick={() => {
-                setVipInitialView('affiliate');
+                setVipInitialView('whitelabel');
                 setIsVipModalOpen(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
             >
               <Crown className="w-4 h-4" />
-              <span>{t.vipClubBtn}</span>
+              <span>شخصی‌سازی فروشگاه / تبلیغات / اشتراک مایکت</span>
             </button>
 
             <button
               onClick={() => setIsInvoiceModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shadow-xs transition-all cursor-pointer whitespace-nowrap"
             >
               <FileText className="w-4 h-4 text-amber-400" />
               <span>
@@ -754,6 +806,178 @@ export default function App() {
           )}
         </section>
 
+        {/* 4.5. Top Sponsored Banner & 4 Creative Pro Tools Bar */}
+        <section className="space-y-4">
+          {/* Active Diamond Sponsor Banner */}
+          {tradingCompanies.length > 0 && (
+            <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-4 sm:p-5 shadow-md border border-indigo-500/30">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                <div className="space-y-1.5 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-md bg-amber-400 text-slate-950 text-[11px] font-black">
+                      {tradingCompanies[activeBannerIdx % tradingCompanies.length].sponsorBadgeText}
+                    </span>
+                    <span className="text-xs font-bold text-amber-300">
+                      {tradingCompanies[activeBannerIdx % tradingCompanies.length].companyName}
+                    </span>
+                    <span className="text-[11px] text-slate-300">
+                      ({tradingCompanies[activeBannerIdx % tradingCompanies.length].cityAndHub})
+                    </span>
+                  </div>
+
+                  <h3 className="text-sm sm:text-base font-black text-white">
+                    📣 {tradingCompanies[activeBannerIdx % tradingCompanies.length].adBannerHeadline}
+                  </h3>
+                  <p className="text-xs text-emerald-300 font-semibold">
+                    🎁 پیشنهاد ویژه همکاران:{' '}
+                    {tradingCompanies[activeBannerIdx % tradingCompanies.length].partnerOfferText}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  <button
+                    onClick={() =>
+                      setActiveBannerIdx((prev) => (prev + 1) % tradingCompanies.length)
+                    }
+                    className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold cursor-pointer"
+                  >
+                    بنر بعدی ({(activeBannerIdx % tradingCompanies.length) + 1}/
+                    {tradingCompanies.length})
+                  </button>
+
+                  <a
+                    href={`https://wa.me/${
+                      tradingCompanies[activeBannerIdx % tradingCompanies.length].whatsappPhone
+                    }?text=${encodeURIComponent(
+                      `سلام، از طریق بنر ویژه شما در سامانه آفرینا فی‌بان (Afrina FeeBan VIP) پیام می‌دهم. لطفاً لیست موجودی و شرایط همکاری را ارسال فرمایید.`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black"
+                  >
+                    <Send className="w-3.5 h-3.5" />
+                    <span>ارتباط مستقیم واتساپ با این بازرگانی</span>
+                  </a>
+
+                  <button
+                    onClick={() => {
+                      setVipInitialView('ads');
+                      setIsVipModalOpen(true);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black cursor-pointer"
+                  >
+                    <Megaphone className="w-3.5 h-3.5" />
+                    <span>+ درج تبلیغات و معرفی بازرگانی شما</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 4 Creative Pro Tools + White-Label Quick Switcher Bar */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+            <button
+              onClick={() => {
+                setProInitialTab('qr_label');
+                setIsProModalOpen(true);
+              }}
+              className="p-3 rounded-xl bg-white border border-slate-200 hover:border-emerald-500 text-right flex items-center gap-2.5 shadow-2xs transition-all cursor-pointer"
+            >
+              <div className="p-2 rounded-lg bg-emerald-100 text-emerald-700 shrink-0">
+                <QrCode className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs font-black text-slate-900">
+                  ۱. برچسب هوشمند QR ویترین
+                </div>
+                <div className="text-[11px] text-slate-500">
+                  چاپ تگ ویترین مغازه بدون قیمت کاغذی
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setProInitialTab('sayadi_check');
+                setIsProModalOpen(true);
+              }}
+              className="p-3 rounded-xl bg-white border border-slate-200 hover:border-indigo-500 text-right flex items-center gap-2.5 shadow-2xs transition-all cursor-pointer"
+            >
+              <div className="p-2 rounded-lg bg-indigo-100 text-indigo-700 shrink-0">
+                <ShieldAlert className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs font-black text-slate-900">
+                  ۲. استعلام رنگ چک صیادی ۱۶ رقمی
+                </div>
+                <div className="text-[11px] text-slate-500">
+                  تشخیص وضعیت سفید/زرد/قرمز و سقف قسط
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setProInitialTab('parts_passport');
+                setIsProModalOpen(true);
+              }}
+              className="p-3 rounded-xl bg-white border border-slate-200 hover:border-sky-500 text-right flex items-center gap-2.5 shadow-2xs transition-all cursor-pointer"
+            >
+              <div className="p-2 rounded-lg bg-sky-100 text-sky-700 shrink-0">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs font-black text-slate-900">
+                  ۳. شناسنامه اصالت قطعه و ریجستری
+                </div>
+                <div className="text-[11px] text-slate-500">
+                  گواهی ۷ روز تست ال‌سی‌دی و باتری فابریک
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setProInitialTab('flash_clearance');
+                setIsProModalOpen(true);
+              }}
+              className="p-3 rounded-xl bg-white border border-slate-200 hover:border-rose-500 text-right flex items-center gap-2.5 shadow-2xs transition-all cursor-pointer"
+            >
+              <div className="p-2 rounded-lg bg-rose-100 text-rose-700 shrink-0">
+                <Flame className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs font-black text-slate-900">
+                  ۴. حراج ۶۰ دقیقه‌ای بار دبی
+                </div>
+                <div className="text-[11px] text-slate-500">
+                  رزرو فوری پارت بار زیر فی علاءالدین
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setVipInitialView('whitelabel');
+                setIsVipModalOpen(true);
+              }}
+              className="p-3 rounded-xl bg-amber-50 border-2 border-amber-300 hover:border-amber-500 text-right flex items-center gap-2.5 shadow-2xs transition-all cursor-pointer"
+            >
+              <div className="p-2 rounded-lg bg-amber-400 text-slate-950 shrink-0">
+                <Palette className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs font-black text-slate-900">
+                  ۵. شخصی‌سازی برای فروشگاه شما
+                </div>
+                <div className="text-[11px] text-amber-900 font-bold">
+                  فروش اختصاصی White-Label و اشتراک بازار
+                </div>
+              </div>
+            </button>
+          </div>
+        </section>
+
         {/* 5. Category Filter Bar & Live Search */}
         <section className="space-y-4">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
@@ -983,6 +1207,185 @@ export default function App() {
         {/* 7. Secondary Sections (Hidden when ADHD Calm Focus Mode is toggled ON to prevent cognitive overload!) */}
         {!adhdFocusMode && (
           <>
+            {/* Directory of Sponsored Stores, Wholesalers & Related Trading Companies */}
+            <section className="rounded-2xl bg-white border-2 border-amber-300/80 shadow-sm p-5 space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2.5 rounded-xl bg-amber-100 text-amber-800">
+                    <Building2 className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-black text-slate-900">
+                      🏢 دایرکتوری تبلیغات و معرفی فروشگاه‌ها، بنکداران و بازرگانی‌های مرتبط (تامین‌کنندگان تاییدشده)
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                      معرفی مستقیم بازرگانی‌های واردات موبایل دبی-تهران، پخش‌کنندگان لپ‌تاپ پایتخت، سورس‌های قطعات تعمیراتی و فروشگاه‌های برتر اقساطی
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => {
+                      setVipInitialView('whitelabel');
+                      setIsVipModalOpen(true);
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold cursor-pointer whitespace-nowrap"
+                  >
+                    🎨 شخصی‌سازی این برنامه به نام بازرگانی شما (White-Label)
+                  </button>
+                  <button
+                    onClick={() => {
+                      setVipInitialView('ads');
+                      setIsVipModalOpen(true);
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold cursor-pointer whitespace-nowrap"
+                  >
+                    + ثبت تبلیغات بنری و معرفی فروشگاه / بازرگانی جدید
+                  </button>
+                </div>
+              </div>
+
+              {/* Category Filter for Trading Companies & Stores */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                {[
+                  { id: 'all', label: `همه بازرگانی‌ها و فروشگاه‌ها (${tradingCompanies.length})` },
+                  { id: 'mobile_importer', label: 'واردکنندگان موبایل و تبلت (دبی / علاءالدین)' },
+                  { id: 'laptop_distributor', label: 'بازرگانی‌های لپ‌تاپ، مک‌بوک و سرفیس' },
+                  { id: 'parts_wholesaler', label: 'پخش عمده قطعات تعمیراتی و LCD فابریک' },
+                  { id: 'accessories_hub', label: 'پخش کارتنی جانبی و کلگی شارژر' },
+                  { id: 'installment_store', label: 'فروشگاه‌های برتر اقساطی چک صیادی' },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() =>
+                      setSelectedAdCategory(tab.id as 'all' | TradingCompanyAd['category'])
+                    }
+                    className={`px-3.5 py-2 rounded-xl text-xs font-extrabold whitespace-nowrap border transition-all cursor-pointer ${
+                      selectedAdCategory === tab.id
+                        ? 'bg-slate-900 text-amber-300 border-slate-900'
+                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-amber-400'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Trading Companies & Sponsored Stores Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {tradingCompanies
+                  .filter(
+                    (tc) => selectedAdCategory === 'all' || tc.category === selectedAdCategory
+                  )
+                  .map((tc) => (
+                    <div
+                      key={tc.id}
+                      className="rounded-2xl bg-slate-50/80 border border-slate-200 hover:border-amber-400 p-4 flex flex-col justify-between space-y-3 transition-all shadow-2xs"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span
+                            className={`text-[11px] font-black px-2.5 py-0.5 rounded-md ${
+                              tc.sponsorTier === 'diamond'
+                                ? 'bg-indigo-100 text-indigo-900 border border-indigo-300'
+                                : tc.sponsorTier === 'gold'
+                                ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                                : 'bg-emerald-100 text-emerald-900 border border-emerald-300'
+                            }`}
+                          >
+                            {tc.sponsorBadgeText}
+                          </span>
+                          <span className="text-[11px] font-bold text-slate-500">
+                            سابقه فعالیت: {tc.yearsActive} سال · {tc.categoryLabel}
+                          </span>
+                        </div>
+
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <h3 className="text-base font-black text-slate-900">
+                              {tc.companyName}
+                            </h3>
+                            <p className="text-[11px] font-mono-num text-slate-500">
+                              {tc.englishName} — 📍 {tc.cityAndHub}
+                            </p>
+                          </div>
+                          <button
+                            onClick={() =>
+                              speakText(
+                                `${tc.companyName}. ${tc.adBannerHeadline}. پیشنهاد ویژه همکاری: ${tc.partnerOfferText}`
+                              )
+                            }
+                            className="p-1.5 rounded-lg bg-white border border-slate-200 text-sky-700 hover:bg-sky-50 cursor-pointer shrink-0"
+                            title="خوانش صوتی معرفی بازرگانی"
+                          >
+                            <Volume2 className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+                          <div className="text-xs font-extrabold text-indigo-900">
+                            📣 {tc.adBannerHeadline}
+                          </div>
+                          <div className="text-xs text-slate-600">
+                            <strong>تخصص و برندها:</strong> {tc.specialty}
+                          </div>
+                          <div className="text-xs text-emerald-700 font-bold">
+                            🎁 مزایای خرید از این مجموعه: {tc.partnerOfferText}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                        <div className="text-[11px] text-slate-600 flex items-center gap-1.5">
+                          <PhoneCall className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="font-mono-num font-bold text-slate-800">
+                            {tc.landlinePhone}
+                          </span>
+                          <span>· {tc.verifiedGuarantee}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => {
+                              setWhiteLabelConfig({
+                                isCustomBrandActive: true,
+                                storeOrCompanyNameFa: tc.companyName,
+                                storeOrCompanyNameEn: tc.englishName,
+                                sloganFa: tc.adBannerHeadline,
+                                whatsappNumber: tc.whatsappPhone,
+                                landlinePhone: tc.landlinePhone,
+                                cityAndAddress: tc.cityAndHub,
+                                specialtyBadge: tc.categoryLabel,
+                                licenseSalePriceToman: 29500000,
+                                themeColor: 'emerald',
+                              });
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className="px-2.5 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-950 text-[11px] font-extrabold cursor-pointer"
+                            title="مشاهده پیش‌نمایش برنامه با نام و برند این بازرگانی"
+                          >
+                            تست برند روی برنامه
+                          </button>
+
+                          <a
+                            href={`https://wa.me/${tc.whatsappPhone}?text=${encodeURIComponent(
+                              `سلام خدمت «${tc.companyName}»، از طریق دایرکتوری بازرگانی‌های سامانه آفرینا فی‌بان (Afrina FeeBan VIP) پیام می‌دهم. لطفاً لیست قیمت همکار را ارسال فرمایید.`
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold whitespace-nowrap"
+                          >
+                            <Send className="w-3.5 h-3.5" />
+                            <span>استعلام واتساپ بازرگانی</span>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </section>
+
             {/* Live Provincial Wholesale Buy Requests Board */}
             <section className="rounded-2xl bg-white border border-slate-200 shadow-xs p-5 space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -1278,11 +1681,31 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <strong className="text-slate-900">
-              Afrina DigiRate VIP | آفرینا دیجی‌رِیت وی‌آی‌پی
+              {whiteLabelConfig.isCustomBrandActive
+                ? `${whiteLabelConfig.storeOrCompanyNameFa} (${whiteLabelConfig.storeOrCompanyNameEn})`
+                : 'Afrina FeeBan VIP (DigiRate) | آفرینا فی‌بان وی‌آی‌پی'}
             </strong>{' '}
-            — Arable Way City Afrina · اکوسیستم آفرینش · شهر جدید نیومتاورسیتی جهان · توان استیج FBNM
+            — Able Way City Afrina · اکوسیستم آفرینش · شهر جدید نیومتاورسیتی جهان · توان استیج FBNM
           </div>
           <div className="flex flex-wrap items-center gap-4">
+            <button
+              onClick={() => {
+                setVipInitialView('whitelabel');
+                setIsVipModalOpen(true);
+              }}
+              className="hover:text-slate-900 font-bold cursor-pointer"
+            >
+              شخصی‌سازی اختصاصی فروشگاه‌ها و بازرگانی‌ها (White-Label)
+            </button>
+            <button
+              onClick={() => {
+                setVipInitialView('ads');
+                setIsVipModalOpen(true);
+              }}
+              className="hover:text-slate-900 font-bold cursor-pointer"
+            >
+              درج تبلیغات و معرفی بازرگانی‌ها
+            </button>
             <button
               onClick={() => {
                 setVipInitialView('vip');
@@ -1290,22 +1713,13 @@ export default function App() {
               }}
               className="hover:text-slate-900 font-bold cursor-pointer"
             >
-              تعرفه اشتراک VIP همکاران (سطح ۱ تا ۵)
-            </button>
-            <button
-              onClick={() => {
-                setVipInitialView('affiliate');
-                setIsVipModalOpen(true);
-              }}
-              className="hover:text-slate-900 font-bold cursor-pointer"
-            >
-              باشگاه ویزیتورهای ۲۵٪ و سفارش White-Label
+              اشتراک ماهانه تا سالانه مایکت و بازار
             </button>
             <button
               onClick={() => setIsPwaModalOpen(true)}
               className="hover:text-slate-900 font-bold cursor-pointer"
             >
-              خروجی امضاشده Gradle APK / AAB (مایکت و بازار)
+              خروجی امضاشده Gradle APK / AAB
             </button>
           </div>
         </div>
@@ -1345,6 +1759,12 @@ export default function App() {
         initialView={vipInitialView}
         activeVipLevel={activeVipLevel}
         onSelectVipLevel={(lvl) => setActiveVipLevel(lvl)}
+        whiteLabelConfig={whiteLabelConfig}
+        onUpdateWhiteLabel={(cfg) => setWhiteLabelConfig(cfg)}
+        tradingCompanies={tradingCompanies}
+        onAddTradingCompany={(newTc) =>
+          setTradingCompanies((prev) => [newTc, ...prev])
+        }
       />
 
       <PwaGithubModal
@@ -1359,6 +1779,24 @@ export default function App() {
         onClose={() => setIsCompareModalOpen(false)}
         rates={rates}
         onSpeakText={speakText}
+      />
+
+      <ProInnovationModal
+        isOpen={isProModalOpen}
+        onClose={() => setIsProModalOpen(false)}
+        products={products}
+        rates={rates}
+        initialTab={proInitialTab}
+        customBrand={{
+          isActive: whiteLabelConfig.isCustomBrandActive,
+          brandName: whiteLabelConfig.storeOrCompanyNameFa,
+          brandSubtitle: whiteLabelConfig.sloganFa,
+          whatsappNumber: whiteLabelConfig.whatsappNumber,
+          storeAddress: whiteLabelConfig.cityAndAddress,
+          instagramId: whiteLabelConfig.storeOrCompanyNameEn,
+          badgeText: whiteLabelConfig.specialtyBadge,
+          themeColor: whiteLabelConfig.themeColor,
+        }}
       />
     </div>
   );

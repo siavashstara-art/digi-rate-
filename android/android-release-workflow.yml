@@ -35,7 +35,7 @@ jobs:
               -validity 10000 \
               -storepass afrina123456 \
               -keypass afrina123456 \
-              -dname "CN=Arable Way City Afrina, OU=DigiRate VIP, O=Afrina Ecosystem, L=Tehran, ST=Tehran, C=IR"
+              -dname "CN=Able Way City Afrina, OU=Afrina FeeBan VIP, O=Afrina Ecosystem, L=Tehran, ST=Tehran, C=IR"
           fi
 
       - name: Build Signed Release APK (For Myket & CafeBazaar)

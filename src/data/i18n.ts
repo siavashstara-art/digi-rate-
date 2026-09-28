@@ -1,4 +1,4 @@
-export type LanguageCode = 'fa' | 'ar' | 'tr' | 'zh' | 'ko' | 'en';
+export type LanguageCode = 'fa' | 'en' | 'ar' | 'tr' | 'zh' | 'ko';
 
 export interface LanguageMeta {
   code: LanguageCode;
@@ -31,6 +31,7 @@ export const UI_TRANSLATIONS: Record<
     volatilityLockedAlert: string;
     installPwaBtn: string;
     compareBtn: string;
+    proSuiteBtn: string;
     calcInstallmentBtn: string;
     storyMakerBtn: string;
     vipClubBtn: string;
@@ -50,10 +51,10 @@ export const UI_TRANSLATIONS: Record<
 > = {
   fa: {
     topEcosystemBanner:
-      'Arable Way City Afrina | اکوسیستم آفرینش · شهر جدید نیومتاورسیتی جهان · توان استیج FBNM',
-    appNameFaEn: 'Afrina DigiRate VIP | آفرینا دیجی‌رِیت وی‌آی‌پی',
+      'Able Way City Afrina | اکوسیستم آفرینش · شهر جدید نیومتاورسیتی جهان · توان استیج FBNM',
+    appNameFaEn: 'Afrina FeeBan VIP (DigiRate) | آفرینا فی‌بان (نرخ‌بان دیجیتال وی‌آی‌پی)',
     appSubtitle:
-      'سامانه هوشمند لیست قیمت لحظه‌ای دلاری/درهمی، بنکداری موبایل، لپ‌تاپ، تبلت، قطعات تعمیراتی و لوازم جانبی ایران و دبی',
+      'سامانه هوشمند فی لحظه‌ای دلاری/درهمی، بورس بنکداری موبایل، لپ‌تاپ، تبلت، قطعات تعمیراتی و لوازم جانبی ایران و دبی',
     liveRateTitle: 'تابلوی زنده نرخ ارز بنکداری (بروزرسانی ۰.۰۱ ثانیه کل کالاها)',
     quickAdjustBtn: 'تنظیم سریع نرخ ارز امروز توسط بنکدار',
     lockVolatilityBtn: '🔒 قفل نوسان شدید ارزی (تبدیل به استعلام واتساپ)',
@@ -62,6 +63,7 @@ export const UI_TRANSLATIONS: Record<
       'حالت نوسان شدید ارزی فعال است — نمایش قیمت‌های ریالی موقتاً متوقف شده و سفارش‌ها از طریق استعلام مستقیم واتساپ انجام می‌شود.',
     installPwaBtn: '📲 نصب اپ + خروجی امضاشده AAB/APK',
     compareBtn: '⚖️ مقایسه تخصصی گوشی، لپ‌تاپ و تبلت',
+    proSuiteBtn: '🏷️ لیبل QR ویترین + استعلام صیادی + پاسپورت قطعه',
     calcInstallmentBtn: '🧮 اقساط چک صیادی و معاوضه Trade-In',
     storyMakerBtn: '📸 استوری‌ساز HD موبایل‌فروشی',
     vipClubBtn: '👑 اشتراک VIP و پورسانت ۲۵٪',
@@ -78,10 +80,41 @@ export const UI_TRANSLATIONS: Record<
     aiAssistantTitle: 'دستیار هوشمند موبایل، تشخیص قطعات فابریک و کپشن‌ساز اینستاگرام',
     securityAutomatedBadge: 'کلیدهای API و امضای دیجیتال Gradle/AAB کاملاً اتوماسیون و ایمن‌سازی شده',
   },
+  en: {
+    topEcosystemBanner:
+      'Able Way City Afrina | Afrina Creation Ecosystem · New Metaverse City · FBNM Stage Power',
+    appNameFaEn: 'Afrina FeeBan VIP (DigiRate) | آفرینا فی‌بان (نرخ‌بان دیجیتال)',
+    appSubtitle:
+      'Global Live USD/AED/CNY Auto-Pricer & B2B Mobile, Laptop, Tablet & Original Parts Wholesale Hub',
+    liveRateTitle: 'Live B2B Exchange Rate Matrix (0.01s Instant Catalog Re-Pricing)',
+    quickAdjustBtn: 'Quick Wholesaler Rate Setup',
+    lockVolatilityBtn: '🔒 Market Volatility Lock (Switch to 1-Click WhatsApp)',
+    unlockVolatilityBtn: '🔓 Unlock Volatility Mode & Show Prices',
+    volatilityLockedAlert:
+      'High Currency Volatility Lock Active — Live prices are masked; click any item for instant WhatsApp quote.',
+    installPwaBtn: '📲 1-Click Install + Signed AAB/APK',
+    compareBtn: '⚖️ Peer Phone, Laptop & Tablet Compare',
+    proSuiteBtn: '🏷️ Smart QR Shelf Tag + Check Inquiry + Parts Passport',
+    calcInstallmentBtn: '🧮 Installment & Used Phone Trade-In Calc',
+    storyMakerBtn: '📸 1-Click HD Story Maker',
+    vipClubBtn: '👑 VIP Tiers & 25% Affiliate',
+    invoiceCartBtn: '🧾 Official IMEI Proforma Cart',
+    accessibilityTitle: 'Disability Accessibility & ADHD Focus Suite:',
+    adhdModeBtn: '🧠 ADHD Focus Mode (Zero Distraction)',
+    readAloudBtn: '🔊 Voice Screen Reader (Audio Prices)',
+    highContrastBtn: '👁️ High Contrast & Large Font',
+    wholesaleLabel: 'B2B Partner Wholesale Price (Carton / Bulk):',
+    retailLabel: 'End-Consumer Price (18-Month Warranty + Registry):',
+    addToInvoiceBtn: 'Add to Official Proforma',
+    inquireWhatsappBtn: '1-Click WhatsApp Wholesale Quote',
+    buyRequestsTitle: 'Live Cash Buy Requests & Partner Stock Shortages Board',
+    aiAssistantTitle: 'Smart Hardware & Original Parts Inspector AI Assistant',
+    securityAutomatedBadge: 'Server-Side Automated API Vault & Signed Gradle AAB/APK Ready',
+  },
   ar: {
     topEcosystemBanner:
-      'Arable Way City Afrina | منظومة آفرينش · مدينة نيوميتافيرسيتي العالمية · منصة FBNM',
-    appNameFaEn: 'Afrina DigiRate VIP | أفرينا ديجي ريت VIP',
+      'Able Way City Afrina | منظومة آفرينش · مدينة نيوميتافيرسيتي العالمية · منصة FBNM',
+    appNameFaEn: 'Afrina FeeBan VIP (DigiRate) | أفرينا في بان (ديجي ريت VIP)',
     appSubtitle:
       'النظام الذكي لأسعار الهواتف واللابتوب والأجهزة اللوحية وقطع الغيار الأصلية بالجملة (دبي، إيران، الصين، تركيا، كوريا)',
     liveRateTitle: 'لوحة أسعار الصرف الحية لتجار الجملة (تحديث فوري خلال 0.01 ثانية)',
@@ -92,6 +125,7 @@ export const UI_TRANSLATIONS: Record<
       'وضع تقلب العملات مفعل حالياً — تم إيقاف عرض الأسعار مؤقتاً وتحويل الطلبات إلى واتساب مباشرة.',
     installPwaBtn: '📲 تثبيت التطبيق + حزمة AAB/APK الموقعة',
     compareBtn: '⚖️ مقارنة الهواتف واللابتوب والتابلت',
+    proSuiteBtn: '🏷️ ملصق QR الذكي + فحص الشيكات + جواز القطع الأصلية',
     calcInstallmentBtn: '🧮 حاسبة الأقساط واستبدال الهواتف Trade-In',
     storyMakerBtn: '📸 صانع ستوري انستغرام HD',
     vipClubBtn: '👑 اشتراك VIP وعمولة 25%',
@@ -110,8 +144,8 @@ export const UI_TRANSLATIONS: Record<
   },
   tr: {
     topEcosystemBanner:
-      'Arable Way City Afrina | Afrina Yaratılış Ekosistemi · Yeni Metaversecity · FBNM Sahne Gücü',
-    appNameFaEn: 'Afrina DigiRate VIP | آفرینا دیجی‌رِیت وی‌آی‌پی',
+      'Able Way City Afrina | Afrina Yaratılış Ekosistemi · Yeni Metaversecity · FBNM Sahne Gücü',
+    appNameFaEn: 'Afrina FeeBan VIP (DigiRate) | آفرینا فی‌بان وی‌آی‌پی',
     appSubtitle:
       'Canlı Döviz Kuru (USD/AED/CNY) Otomatik Fiyatlandırma, Cep Telefonu, Laptop, Tablet ve Orijinal Parça Toptan Merkezi',
     liveRateTitle: 'Canlı Toptancı Döviz Kuru Paneli (0.01 Saniyede Tüm Fiyatları Günceller)',
@@ -122,6 +156,7 @@ export const UI_TRANSLATIONS: Record<
       'Yüksek Kur Dalgalanma Kilidi Aktif — Fiyatlar geçici olarak gizlendi, tek tıkla WhatsApp üzerinden anlık fiyat alabilirsiniz.',
     installPwaBtn: '📲 Uygulamayı Yükle + İmzalı AAB/APK',
     compareBtn: '⚖️ Telefon, Laptop ve Tablet Karşılaştır',
+    proSuiteBtn: '🏷️ Akıllı Vitrin QR + Çek Sorgu + Orijinal Parça Pasaportu',
     calcInstallmentBtn: '🧮 Taksit ve Eski Telefonu Yenileme (Trade-In)',
     storyMakerBtn: '📸 1-Tıkla HD Story Oluşturucu',
     vipClubBtn: '👑 VIP Üyelik ve %25 Komisyon',
@@ -140,8 +175,8 @@ export const UI_TRANSLATIONS: Record<
   },
   zh: {
     topEcosystemBanner:
-      'Arable Way City Afrina | 阿夫里纳创造生态系统 · 全球新元宇宙城市 · FBNM 舞台动力',
-    appNameFaEn: 'Afrina DigiRate VIP | 阿夫里纳数码批发 VIP',
+      'Able Way City Afrina | 阿夫里纳创造生态系统 · 全球新元宇宙城市 · FBNM 舞台动力',
+    appNameFaEn: 'Afrina FeeBan VIP (DigiRate) | 阿夫里纳智能核价 VIP',
     appSubtitle:
       '全球实时美元/迪拉姆/人民币智能定价系统 · 手机、笔记本电脑、平板与原装维修配件批发平台',
     liveRateTitle: '实时汇率看板 (0.01秒全站商品自动调价)',
@@ -151,6 +186,7 @@ export const UI_TRANSLATIONS: Record<
     volatilityLockedAlert: '当前处于汇率剧烈波动保护模式 — 终端价格已隐藏，请点击按钮通过 WhatsApp 实时询价。',
     installPwaBtn: '📲 一键安装 + 签名 AAB/APK',
     compareBtn: '⚖️ 手机、笔记本与平板专业对比',
+    proSuiteBtn: '🏷️ 橱窗动态二维码价签 + 支票信用查询 + 原装配件数字护照',
     calcInstallmentBtn: '🧮 分期付款与以旧换新 (Trade-In)',
     storyMakerBtn: '📸 一键高清海报生成',
     vipClubBtn: '👑 VIP 会员与 25% 佣金',
@@ -169,8 +205,8 @@ export const UI_TRANSLATIONS: Record<
   },
   ko: {
     topEcosystemBanner:
-      'Arable Way City Afrina | 아프리나 창조 생태계 · 뉴 메타버스 시티 · FBNM 스테이지 파워',
-    appNameFaEn: 'Afrina DigiRate VIP | 아프리나 디지레이트 VIP',
+      'Able Way City Afrina | 아프리나 창조 생태계 · 뉴 메타버스 시티 · FBNM 스테이지 파워',
+    appNameFaEn: 'Afrina FeeBan VIP (DigiRate) | 아프리나 피반 디지레이트 VIP',
     appSubtitle:
       '실시간 달러/디르함 자동 가격 연동 · 스마트폰, 노트북, 태블릿 및 정품 수리 부품 글로벌 도매 플랫폼',
     liveRateTitle: '실시간 도매 환율 보드 (0.01초 내 전체 상품 가격 자동 업데이트)',
@@ -181,6 +217,7 @@ export const UI_TRANSLATIONS: Record<
       '환율 급변동 보호 모드가 활성화되었습니다 — 실시간 가격 표시가 일시 중지되었으며 WhatsApp을 통해 즉시 견적을 받으실 수 있습니다.',
     installPwaBtn: '📲 앱 설치 (iOS/Android) + 서명된 AAB/APK',
     compareBtn: '⚖️ 스마트폰·노트북·태블릿 전문 비교',
+    proSuiteBtn: '🏷️ 스마트 QR 진열장 가격표 + 수표 신용조회 + 정품 부품 여권',
     calcInstallmentBtn: '🧮 할부 및 중고폰 보상판매 (Trade-In)',
     storyMakerBtn: '📸 1클릭 HD 스토리 제작기',
     vipClubBtn: '👑 VIP 멤버십 및 25% 커미션',
@@ -196,35 +233,5 @@ export const UI_TRANSLATIONS: Record<
     buyRequestsTitle: '실시간 현금 매입 요청 및 파트너 재고 부족 현황판',
     aiAssistantTitle: '스마트 기기 비교, 정품 액정 판별 및 인스타그램 캡션 AI 어시스턴트',
     securityAutomatedBadge: '서버 측 API 보안 금고 및 서명된 Gradle AAB/APK 자동화 완료',
-  },
-  en: {
-    topEcosystemBanner:
-      'Arable Way City Afrina | Afrina Creation Ecosystem · New Metaverse City · FBNM Stage Power',
-    appNameFaEn: 'Afrina DigiRate VIP | آفرینا دیجی‌رِیت وی‌آی‌پی',
-    appSubtitle:
-      'Global Live USD/AED/CNY Auto-Pricer & B2B Mobile, Laptop, Tablet & Original Parts Wholesale Hub',
-    liveRateTitle: 'Live B2B Exchange Rate Matrix (0.01s Instant Catalog Re-Pricing)',
-    quickAdjustBtn: 'Quick Wholesaler Rate Setup',
-    lockVolatilityBtn: '🔒 Market Volatility Lock (Switch to 1-Click WhatsApp)',
-    unlockVolatilityBtn: '🔓 Unlock Volatility Mode & Show Prices',
-    volatilityLockedAlert:
-      'High Currency Volatility Lock Active — Live prices are masked; click any item for instant WhatsApp quote.',
-    installPwaBtn: '📲 1-Click Install + Signed AAB/APK',
-    compareBtn: '⚖️ Peer Phone, Laptop & Tablet Compare',
-    calcInstallmentBtn: '🧮 Installment & Used Phone Trade-In Calc',
-    storyMakerBtn: '📸 1-Click HD Story Maker',
-    vipClubBtn: '👑 VIP Tiers & 25% Affiliate',
-    invoiceCartBtn: '🧾 Official IMEI Proforma Cart',
-    accessibilityTitle: 'Disability Accessibility & ADHD Focus Suite:',
-    adhdModeBtn: '🧠 ADHD Focus Mode (Zero Distraction)',
-    readAloudBtn: '🔊 Voice Screen Reader (Audio Prices)',
-    highContrastBtn: '👁️ High Contrast & Large Font',
-    wholesaleLabel: 'B2B Partner Wholesale Price (Carton / Bulk):',
-    retailLabel: 'End-Consumer Price (18-Month Warranty + Registry):',
-    addToInvoiceBtn: 'Add to Official Proforma',
-    inquireWhatsappBtn: '1-Click WhatsApp Wholesale Quote',
-    buyRequestsTitle: 'Live Cash Buy Requests & Partner Stock Shortages Board',
-    aiAssistantTitle: 'Smart Hardware & Original Parts Inspector AI Assistant',
-    securityAutomatedBadge: 'Server-Side Automated API Vault & Signed Gradle AAB/APK Ready',
   },
 };
