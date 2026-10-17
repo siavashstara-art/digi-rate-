@@ -12,6 +12,9 @@ interface StoryMakerModalProps {
   onClose: () => void;
   products: ProductItem[];
   rates: MarketRates;
+  tenantBrandName?: string;
+  tenantPhone?: string;
+  tenantCity?: string;
 }
 
 export const StoryMakerModal: React.FC<StoryMakerModalProps> = ({
@@ -19,14 +22,27 @@ export const StoryMakerModal: React.FC<StoryMakerModalProps> = ({
   onClose,
   products,
   rates,
+  tenantBrandName,
+  tenantPhone,
+  tenantCity,
 }) => {
   const [storyMode, setStoryMode] = useState<'pricelist' | 'single'>('pricelist');
-  const [storeName, setStoreName] = useState<string>('موبایل و دیجیتال رویال پلاس');
-  const [storePhone, setStorePhone] = useState<string>('0912-000-0000 | 021-66700000');
+  const [storeName, setStoreName] = useState<string>(
+    tenantBrandName || 'موبایل و دیجیتال رویال پلاس'
+  );
+  const [storePhone, setStorePhone] = useState<string>(
+    tenantPhone || '0912-000-0000 | 021-66700000'
+  );
   const [storeInsta, setStoreInsta] = useState<string>('@RoyalMobile.VIP');
   const [storeAddress, setStoreAddress] = useState<string>(
-    'تهران، تقاطع جمهوری و حافظ، پاساژ چارسو، طبقه دوم'
+    tenantCity || 'تهران، تقاطع جمهوری و حافظ، پاساژ چارسو، طبقه دوم'
   );
+
+  useEffect(() => {
+    if (tenantBrandName) setStoreName(tenantBrandName);
+    if (tenantPhone) setStorePhone(tenantPhone);
+    if (tenantCity) setStoreAddress(tenantCity);
+  }, [tenantBrandName, tenantPhone, tenantCity]);
   const [selectedProductId, setSelectedProductId] = useState<string>(products[0]?.id || '');
   const [priceTypeForList, setPriceTypeForList] = useState<'retail' | 'wholesale'>('retail');
   const [downloadedToast, setDownloadedToast] = useState<boolean>(false);

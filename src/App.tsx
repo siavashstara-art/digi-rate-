@@ -59,6 +59,10 @@ import { VipAffiliateModal, MonetizationTab } from './components/VipAffiliateMod
 import { PwaGithubModal } from './components/PwaGithubModal';
 import { DeviceComparisonModal } from './components/DeviceComparisonModal';
 import { ProInnovationModal } from './components/ProInnovationModal';
+import {
+  VipCommercialArchitectureSections,
+  IsolatedTenantRecord,
+} from './components/VipCommercialArchitectureSections';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -79,11 +83,15 @@ export default function App() {
     document.documentElement.lang = currentLangMeta.code;
   }, [currentLangMeta]);
 
-  // Accessibility & ADHD States
+  // Accessibility & ADHD & Deaf/Blind States
   const [adhdFocusMode, setAdhdFocusMode] = useState<boolean>(false);
   const [fontScale, setFontScale] = useState<'normal' | 'large' | 'xlarge'>('normal');
   const [highContrast, setHighContrast] = useState<boolean>(false);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  const [deafVisualMode, setDeafVisualMode] = useState<boolean>(false);
+  const [liveVisualCaption, setLiveVisualCaption] = useState<string>(
+    'زیرنویس زنده بصری (ویژه ناشنوایان): سامانه آماده است — نرخ لحظه‌ای دلار ۶۸,۵۰۰ تومان و درهم ۱۸,۷۵۰ تومان.'
+  );
 
   // Live Market Exchange Rates State
   const [rates, setRates] = useState<MarketRates>({
@@ -143,6 +151,53 @@ export default function App() {
   const [whiteLabelConfig, setWhiteLabelConfig] = useState<WhiteLabelConfig>(
     DEFAULT_WHITELABEL_CONFIG
   );
+
+  // Isolated White-Label Tenant & URL Skin State (?tenant=...&manager=...&city=...&phone=...&ref=...)
+  const [activeTenant, setActiveTenant] = useState<IsolatedTenantRecord>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlTenant = params.get('tenant');
+      const urlManager = params.get('manager');
+      const urlCity = params.get('city');
+      const urlPhone = params.get('phone');
+      const urlRef = params.get('ref');
+
+      if (urlTenant) {
+        const slug = urlTenant.trim().toLowerCase().replace(/\s+/g, '-');
+        return {
+          slug,
+          tenantName: urlTenant,
+          managerName: urlManager || 'مدیریت محترم واحد صنفی',
+          city: urlCity || 'تهران - علاءالدین / چارسو',
+          phone: urlPhone || '989120000000',
+          slogan: 'سامانه اختصاصی فی لحظه‌ای دلاری/درهمی، تقسیط چک صیادی و پیش‌فاکتور طلاکوب',
+          priceMultiplier: 1.0,
+          refCode: urlRef || 'AMB-VIP-25',
+          isPermanentLicense: false,
+          updatedAt: 'هم‌اکنون',
+        };
+      }
+    }
+    return {
+      slug: 'royal-mobile-charsou',
+      tenantName: 'آفرینا فی‌بان وی‌آی‌پی (Afrina FeeBan VIP)',
+      managerName: 'حاج مهدی کریمی',
+      city: 'تهران - پاساژ علاءالدین و چارسو',
+      phone: '989120000000',
+      slogan: 'سامانه هوشمند فی لحظه‌ای دلاری/درهمی، تقسیط چک صیادی بنفش و پیش‌فاکتور طلاکوب IMEI',
+      priceMultiplier: 1.0,
+      refCode: 'AMB-7740',
+      isPermanentLicense: false,
+      updatedAt: 'لحظاتی پیش',
+    };
+  });
+
+  // Synchronize document.title automatically with active tenant business name
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.title = `${activeTenant.tenantName} | مدیریت: ${activeTenant.managerName} - Able Way City Afrina`;
+    }
+  }, [activeTenant.tenantName, activeTenant.managerName]);
 
   // Sponsored Ads & Featured Trading Companies / Stores State
   const [tradingCompanies, setTradingCompanies] = useState<TradingCompanyAd[]>(
@@ -237,8 +292,9 @@ export default function App() {
     });
   }, [products, selectedCategory, searchQuery]);
 
-  // Screen Reader / Audio TTS for Visually Impaired Users
+  // Screen Reader / Audio TTS for Visually Impaired Users + Visual Caption for Deaf Users
   const speakText = (textToSpeak: string) => {
+    setLiveVisualCaption(`🔔 زیرنویس زنده صوتی/بصری: ${textToSpeak}`);
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     if (isSpeaking) {
@@ -458,6 +514,17 @@ export default function App() {
               <Eye className="w-3.5 h-3.5" />
               <span>{t.highContrastBtn}</span>
             </button>
+
+            <button
+              onClick={() => setDeafVisualMode(!deafVisualMode)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer whitespace-nowrap ${
+                deafVisualMode
+                  ? 'bg-emerald-700 text-white border-emerald-800 shadow-xs'
+                  : 'bg-white text-slate-700 border-slate-300 hover:border-emerald-500'
+              }`}
+            >
+              <span>🦻 زیرنویس و هشدار بصری (ویژه ناشنوایان)</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-800">
@@ -465,6 +532,16 @@ export default function App() {
             <span>{t.securityAutomatedBadge}</span>
           </div>
         </div>
+
+        {/* Live Visual Subtitle Banner for Deaf & Hard-of-Hearing Users */}
+        {deafVisualMode && (
+          <div className="max-w-7xl mx-auto mt-2 p-2.5 rounded-xl bg-slate-900 text-amber-300 border-2 border-amber-400 text-xs font-extrabold flex items-center justify-between gap-2">
+            <span>{liveVisualCaption}</span>
+            <span className="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 text-[10px] font-black shrink-0">
+              زیرنویس زنده فعال
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 3. Main Brand Header & Quick Action Toolbar */}
@@ -565,11 +642,35 @@ export default function App() {
                 {t.invoiceCartBtn} ({cart.reduce((sum, i) => sum + i.qty, 0)})
               </span>
             </button>
+
+            <a
+              href="#deliverables"
+              className="flex items-center gap-1 px-3 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 text-xs font-black transition-all whitespace-nowrap"
+            >
+              <span>🎁 دستاوردهای صنف و ROI</span>
+            </a>
+
+            <a
+              href="#visitor-playbook"
+              className="flex items-center gap-1 px-3 py-2 rounded-xl bg-emerald-100 hover:bg-emerald-200 text-emerald-950 border border-emerald-300 text-xs font-black transition-all whitespace-nowrap"
+            >
+              <span>💼 فرمول فروش ویزیتورها (۲۵٪)</span>
+            </a>
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-6 space-y-8">
+        {/* 3.5. VIP Commercial White-Label Architecture, Desk Calculator, Deliverables, Visitor Playbook & 25% Sheba Hub */}
+        <VipCommercialArchitectureSections
+          products={products}
+          rates={rates}
+          whiteLabelConfig={whiteLabelConfig}
+          onUpdateWhiteLabel={(cfg) => setWhiteLabelConfig(cfg)}
+          activeTenant={activeTenant}
+          onUpdateActiveTenant={(tRec) => setActiveTenant(tRec)}
+          onSpeakText={speakText}
+        />
         {/* 4. Live Exchange Rate Matrix & Market Volatility Lock */}
         <section className="rounded-2xl bg-white border-2 border-emerald-500/30 shadow-md p-5 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -1740,6 +1841,9 @@ export default function App() {
         onClose={() => setIsStoryModalOpen(false)}
         products={products}
         rates={rates}
+        tenantBrandName={activeTenant.tenantName}
+        tenantPhone={activeTenant.phone}
+        tenantCity={activeTenant.city}
       />
 
       <InvoiceCartModal
@@ -1751,6 +1855,11 @@ export default function App() {
         onRemoveItem={handleRemoveCartItem}
         onClearCart={() => setCart([])}
         rates={rates}
+        tenantBrandName={activeTenant.tenantName}
+        tenantManagerName={activeTenant.managerName}
+        tenantPhone={activeTenant.phone}
+        tenantCity={activeTenant.city}
+        refAmbassadorCode={activeTenant.refCode}
       />
 
       <VipAffiliateModal

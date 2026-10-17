@@ -35,6 +35,11 @@ interface InvoiceCartModalProps {
   onRemoveItem: (productId: string) => void;
   onClearCart: () => void;
   rates: MarketRates;
+  tenantBrandName?: string;
+  tenantManagerName?: string;
+  tenantPhone?: string;
+  tenantCity?: string;
+  refAmbassadorCode?: string;
 }
 
 export const InvoiceCartModal: React.FC<InvoiceCartModalProps> = ({
@@ -46,6 +51,11 @@ export const InvoiceCartModal: React.FC<InvoiceCartModalProps> = ({
   onRemoveItem,
   onClearCart,
   rates,
+  tenantBrandName,
+  tenantManagerName,
+  tenantPhone,
+  tenantCity,
+  refAmbassadorCode,
 }) => {
   const [invoicePricingType, setInvoicePricingType] = useState<'wholesale' | 'retail'>('wholesale');
   const [settlementMethod, setSettlementMethod] = useState<'escrow' | 'sayadi' | 'crypto'>('escrow');
@@ -82,8 +92,13 @@ export const InvoiceCartModal: React.FC<InvoiceCartModalProps> = ({
       )} ت | سریال/IMEI: ${entry.customImei}\n   ضمانت: ${entry.product.warrantyText}`;
     });
 
+    const activeHeaderBrand =
+      tenantBrandName || 'آفرینا فی‌بان وی‌آی‌پی (Afrina FeeBan VIP)';
+    const activeTargetPhone = (tenantPhone || '989120000000').replace(/[^0-9]/g, '');
+
     const text = [
-      `🧾 *پیش‌فاکتور رسمی دیجیتال DigiRate VIP*`,
+      `🧾 *پیش‌فاکتور رسمی طلاکوب ${activeHeaderBrand}*`,
+      tenantManagerName ? `👔 به مدیریت: ${tenantManagerName} (${tenantCity || 'تهران'})` : '',
       `نوع فاکتور: ${
         invoicePricingType === 'wholesale'
           ? 'همکار (عمده/کارتنی)'
@@ -98,9 +113,12 @@ export const InvoiceCartModal: React.FC<InvoiceCartModalProps> = ({
       `💎 معادل ارزی: ${totalUsdtEquivalent} USDT | ${totalAedEquivalent} AED`,
       `🛡️ روش تسویه انتخابی: ${settlementTitle}`,
       `✅ دارای مهلت تست ۷ روزه قطعات تعمیراتی و ضمانت اصالت همتا`,
-    ].join('\n');
+      refAmbassadorCode ? `🔖 کد سفیر و اصالت سامانه: ${refAmbassadorCode}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
 
-    const url = `https://wa.me/989120000000?text=${encodeURIComponent(text)}`;
+    const url = `https://wa.me/${activeTargetPhone || '989120000000'}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
@@ -115,10 +133,10 @@ export const InvoiceCartModal: React.FC<InvoiceCartModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">
-                سبد پیش‌فاکتور رسمی دیجیتال (با درج کد سریال IMEI، همتا و گارانتی ۱۸ ماهه)
+                سبد پیش‌فاکتور رسمی دیجیتال: {tenantBrandName || 'آفرینا فی‌بان (Afrina FeeBan VIP)'}
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
-                صدور آنی فاکتور همکار یا مصرف‌کننده + چاپ رسمی A4 و ارسال به واتساپ
+                {tenantManagerName ? `مدیریت: ${tenantManagerName} · ` : ''}صدور آنی فاکتور همکار یا مصرف‌کننده با کد سریال IMEI + چاپ رسمی A4 و ارسال به واتساپ
               </p>
             </div>
           </div>

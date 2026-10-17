@@ -1,4 +1,4 @@
-export type LanguageCode = 'fa' | 'en' | 'ar' | 'tr' | 'zh' | 'ko';
+export type LanguageCode = 'fa' | 'en' | 'ar' | 'zh' | 'ko' | 'ku' | 'tr';
 
 export interface LanguageMeta {
   code: LanguageCode;
@@ -13,9 +13,10 @@ export const LANGUAGES: LanguageMeta[] = [
   { code: 'fa', label: 'فارسی', nativeName: 'فارسی (IR)', dir: 'rtl', flag: '🇮🇷', speechLang: 'fa-IR' },
   { code: 'en', label: 'English', nativeName: 'English (Global)', dir: 'ltr', flag: '🇬🇧', speechLang: 'en-US' },
   { code: 'ar', label: 'العربية', nativeName: 'العربية (AE)', dir: 'rtl', flag: '🇦🇪', speechLang: 'ar-SA' },
-  { code: 'tr', label: 'Türkçe', nativeName: 'Türkçe (TR)', dir: 'ltr', flag: '🇹🇷', speechLang: 'tr-TR' },
   { code: 'zh', label: '中文', nativeName: '中文 (CN)', dir: 'ltr', flag: '🇨🇳', speechLang: 'zh-CN' },
   { code: 'ko', label: '한국어', nativeName: '한국어 (KR)', dir: 'ltr', flag: '🇰🇷', speechLang: 'ko-KR' },
+  { code: 'ku', label: 'کوردی', nativeName: 'کوردی (KU)', dir: 'rtl', flag: '☀️', speechLang: 'fa-IR' },
+  { code: 'tr', label: 'Türkçe', nativeName: 'Türkçe (TR)', dir: 'ltr', flag: '🇹🇷', speechLang: 'tr-TR' },
 ];
 
 export const UI_TRANSLATIONS: Record<
@@ -233,5 +234,36 @@ export const UI_TRANSLATIONS: Record<
     buyRequestsTitle: '실시간 현금 매입 요청 및 파트너 재고 부족 현황판',
     aiAssistantTitle: '스마트 기기 비교, 정품 액정 판별 및 인스타그램 캡션 AI 어시스턴트',
     securityAutomatedBadge: '서버 측 API 보안 금고 및 서명된 Gradle AAB/APK 자동화 완료',
+  },
+  ku: {
+    topEcosystemBanner:
+      'Able Way City Afrina | ئیکۆسیستەمی ئافرینش · شاری نوێی میتاڤێرسی جیهان · هێزی ستەیجی FBNM',
+    appNameFaEn: 'Afrina FeeBan VIP (DigiRate) | ئافرینا فی‌بان ڤی ئای پی (دیجی ڕەیت)',
+    appSubtitle:
+      'سیستەمی زیرەکی نرخی سات بە ساتی دۆلار و درهەم، بۆرسەی جوملەی مۆبایل، لاپتۆپ، تابلێت و پارچەی ئەسڵی',
+    liveRateTitle: 'تابلۆی زیندووی نرخی دراو (نوێکردنەوەی خێرای هەموو کاڵاکان لە ٠.٠١ چرکەدا)',
+    quickAdjustBtn: 'ڕێکخستنی خێرای نرخی دراوی ئەمڕۆ لەلایەن بازرگان',
+    lockVolatilityBtn: '🔒 قفڵی گۆڕانکاری توندی بازاڕ (گۆڕین بۆ پەیوەندی واتسئەپ)',
+    unlockVolatilityBtn: '🔓 کردنەوەی قفڵی بازاڕ و پیشاندانەوەی نرخەکان',
+    volatilityLockedAlert:
+      'دۆخی ناجێگیری بازاڕ چالاکە — پیشاندانی نرخەکان بە شێوەی کاتی ڕاگیراوە؛ بۆ وەرگرتنی نرخی سات بە سات کلیک لە واتسئەپ بکە.',
+    installPwaBtn: '📲 دابەزاندنی ئەپ + دەرچوونی AAB/APK',
+    compareBtn: '⚖️ بەراوردی پسپۆڕانەی مۆبایل، لاپتۆپ و تابلێت',
+    proSuiteBtn: '🏷️ لێبڵی QR ڤیترین + پشکنینی چەک + ناسنامەی پارچە',
+    calcInstallmentBtn: '🧮 قیستی چەکی سەیادی و گۆڕینەوە Trade-In',
+    storyMakerBtn: '📸 دروستکەری ستۆری HD فرۆشگا',
+    vipClubBtn: '👑 بەشداری VIP و پاداشتی ٢٥٪',
+    invoiceCartBtn: '🧾 پێش‌فاکتۆری فەرمی IMEI',
+    accessibilityTitle: 'دەستڕاگەیشتنی خاوەن پێداویستی تایبەت، نابیست، نابینا و ADHD:',
+    adhdModeBtn: '🧠 دۆخی تەرکیزی ADHD (کەمکردنەوەی قەرەباڵغی)',
+    readAloudBtn: '🔊 خوێندنەوەی دەنگی نرخەکان (نابینایان)',
+    highContrastBtn: '👁️ کۆنتراستی بەرز و گەورەکردنی فۆنت',
+    wholesaleLabel: 'نرخی کۆفرۆشی هاوکار (جوملە / کارتۆن):',
+    retailLabel: 'نرخی بەکارهێنەر (تاکفرۆشی + کۆدی فەرمی و گەرەنتی ١٨ مانگ):',
+    addToInvoiceBtn: 'زیادکردن بۆ پێش‌فاکتۆری فەرمی',
+    inquireWhatsappBtn: 'پرسیاری نرخی جوملە لە واتسئەپ',
+    buyRequestsTitle: 'تابلۆی زیندووی داواکاری کڕینی نەقدی و لیستی کەمی کاڵای هاوکاران',
+    aiAssistantTitle: 'یاریدەدەری زیرەکی مۆبایل، ناسینەوەی شاشەی فابریک و نووسینی پۆستی ئینستاگرام',
+    securityAutomatedBadge: 'کلیلەکانی API و واژۆی دیجیتاڵی Gradle/AAB بە تەواوی لە سێرڤەردا پارێزراون',
   },
 };

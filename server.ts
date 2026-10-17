@@ -25,8 +25,32 @@ let currentMarketRates = {
   updatedAt: new Date().toLocaleTimeString('fa-IR'),
 };
 
+const aiResponseCache = new Map<string, { answer: string; timestamp: number }>();
+const AI_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes cache to prevent resource_exhausted quota limits
+
 function generateSmartFallbackAnswer(prompt: string, mode?: string): string {
   const q = (prompt || '').toLowerCase();
+
+  if (q.includes('چک') || q.includes('صیاد') || q.includes('اقساط') || q.includes('قسط')) {
+    return `🟣 **راهنمای تخصصی فروش اقساطی با چک صیادی بنفش و استعلام رنگ بانک مرکزی:**
+
+1. **استاندارد طلایی پیش‌پرداخت و اقساط در بازار موبایل و لپ‌تاپ:**
+   - **پیش‌پرداخت نقدی:** حداقل ۳۰٪ مبلغ کل فاکتور جهت پوشش حاشیه ریسک و هزینه تامین.
+   - **تعداد اقساط:** ۳، ۶، ۹ یا ۱۲ فقره چک صیادی بنفش با فاصله سررسید ماهانه دقیق شمسی.
+2. **قانون استعلام رنگ چک صیادی (سامانه بانک مرکزی):**
+   - **وضعیت سفید:** مجاز به تقسیط تا سقف ۱۲ ماه بدون ضامن.
+   - **وضعیت زرد (۱ فقره چک برگشتی تا سقف ۵۰ میلیون):** نیازمند دریافت حداقل ۴۵٪ پیش‌پرداخت یا امضای ضامن معتبر.
+   - **وضعیت نارنجی، قهوه‌ای و قرمز:** صدور دسته چک و ثبت در سامانه صیاد مسدود بوده و فروش فقط به صورت نقدی یا تتر (USDT) مجاز است.`;
+  }
+
+  if (q.includes('وایت') || q.includes('ویزیتور') || q.includes('پورسانت') || q.includes('شبا') || q.includes('لایسنس')) {
+    return `💼 **راهنمای معماری وایت‌لیبل ایزوله و پورسانت ۲۵٪ ویزیتورهای فروش (مدل استاندارد VIP):**
+
+1. **ایزولاسیون کامل اطلاعات هر فروشگاه (Multi-Tenant Isolation):**
+   - هر موبایل‌فروشی یا بازرگانی دارای شناسه اختصاصی (\`?tenant=نام-فروشگاه\`) در مرورگر و سرور است؛ قیمت‌ها، مشتریان و ضریب سود هیچ فروشگاهی برای رقیب قابل مشاهده نیست.
+2. **درآمد و پورسانت نقدی ۲۵٪ ویزیتورها (تسویه آنی شبا):**
+   - با فروش هر لایسنس پایه (۱.۴ میلیون تومان) مبلغ **۳۵۰,۰۰۰ تومان** و با فروش هر لایسنس VIP (۲.۹ میلیون تومان) مبلغ **۷۲۵,۰۰۰ تومان** پورسانت خالص به شماره شبای ویزیتور واریز می‌شود.`;
+  }
 
   if (mode === 'compare' || q.includes('مقایسه') || q.includes('s24') || q.includes('16 pro')) {
     return `📊 **مقایسه تخصصی ویژه مشاوره فروش به مشتری (تحلیل فنی بازار ایران و دبی):**
@@ -71,7 +95,7 @@ function generateSmartFallbackAnswer(prompt: string, mode?: string): string {
 📲 برای دریافت لیست قیمت همکار و تک‌فروشی، کلمه «قیمت» رو دایرکت بفرست!`;
   }
 
-  return `🤖 **پاسخ تخصصی دستیار هوشمند DigiRate VIP:**
+  return `🤖 **پاسخ تخصصی دستیار هوشمند DigiRate VIP (مجهز به سپر ضد محدودیت کوئوتا):**
 
 بر اساس بررسی فنی بازار موبایل، لپ‌تاپ و قطعات (تهران - پاساژ علاءالدین/چارسو و دبی - دیره):
 - **تحلیل خرید و قیمت‌گذاری:** با توجه به نوسان لحظه‌ای دلار و درهم، پیشنهاد می‌شود برای فروش‌های عمده و کارتنی از قیمت پایه درهمی (AED) استفاده کنید و برای مشتریان مصرف‌کننده، فاکتور رسمی با کد همتا صادر نمایید.
@@ -121,11 +145,17 @@ async function startServer() {
     res.json(currentMarketRates);
   });
 
-  // AI Assistant Endpoint with @google/genai + Smart Offline Fallback
+  // AI Assistant Endpoint with @google/genai + Quota Shield Cache + Smart Offline Fallback
   app.post('/api/ai-assistant', async (req, res) => {
     const { prompt, mode } = req.body || {};
     if (!prompt || typeof prompt !== 'string') {
       return res.status(400).json({ error: 'لطفاً متن سوال یا درخواست خود را وارد کنید.' });
+    }
+
+    const cacheKey = `${mode || 'general'}::${prompt.trim().toLowerCase()}`;
+    const cached = aiResponseCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < AI_CACHE_TTL_MS) {
+      return res.json({ answer: cached.answer, source: 'quota-shield-cache' });
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
@@ -151,14 +181,16 @@ async function startServer() {
 
         const text = response.text;
         if (text && text.trim().length > 0) {
+          aiResponseCache.set(cacheKey, { answer: text, timestamp: Date.now() });
           return res.json({ answer: text, source: 'gemini-live' });
         }
       } catch (_err) {
-        // Gracefully fall back to built-in expert responder
+        // Automatically absorbs resource_exhausted (429 quota limit) and serves built-in expert response
       }
     }
 
     const fallbackAnswer = generateSmartFallbackAnswer(prompt, mode);
+    aiResponseCache.set(cacheKey, { answer: fallbackAnswer, timestamp: Date.now() });
     return res.json({ answer: fallbackAnswer, source: 'smart-engine' });
   });
 
